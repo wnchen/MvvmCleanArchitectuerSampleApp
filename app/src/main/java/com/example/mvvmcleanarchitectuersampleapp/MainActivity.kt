@@ -16,10 +16,10 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+    internal lateinit var viewModelFactory: ViewModelFactory
 
     @Inject
-    lateinit var searchMovieViewModel: SearchMovieViewModel
+    internal lateinit var searchMovieViewModel: SearchMovieViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,16 +62,16 @@ class MainActivity : AppCompatActivity() {
 
     @ActivityScope
     @Component(modules = [ModuleMainActivity::class], dependencies = [CoreComponent::class])
-    interface MainActivityComponent {
+    internal interface MainActivityComponent {
         fun inject(mainActivity: MainActivity)
     }
 
     @Module
-    class ModuleMainActivity(private val mainActivity: MainActivity) {
+    internal class ModuleMainActivity(private val mainActivity: MainActivity) {
 
         @Provides
         @ActivityScope
-        fun provideGetPasswordPolicyViewModel(): SearchMovieViewModel {
+        internal fun provideGetPasswordPolicyViewModel(): SearchMovieViewModel {
             return ViewModelProviders.of(mainActivity, mainActivity.viewModelFactory).get(SearchMovieViewModel::class.java)
         }
     }

@@ -10,7 +10,7 @@ import com.example.domain.SearchMovieUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase): ViewModel() {
+internal class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase): ViewModel() {
 
     private val searchMovieListLiveData: MutableLiveData<List<MovieEntity>> by lazy {
         MutableLiveData<List<MovieEntity>>()
