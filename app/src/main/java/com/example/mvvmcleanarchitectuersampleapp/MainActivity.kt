@@ -1,8 +1,6 @@
 package com.example.mvvmcleanarchitectuersampleapp
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -30,12 +28,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindUi() {
-        tv_main.setOnClickListener {
-            startActivity(Intent(this, SecondActivity::class.java))
-            finish()
-        }
         searchMovieViewModel.observeToMovieListChange().observe(this,
-            Observer<List<MovieEntity>> { it -> tv_main.text = it.toString() })
+            Observer<List<MovieEntity>> { tv_main.text = it.toString() })
     }
 
     override fun onStart() {
@@ -45,11 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun getPasswordPolicy() {
         searchMovieViewModel.searchMovieList("spider")
-    }
-
-    override fun onDestroy() {
-        Log.i("lifecycletest", "onDestroy called")
-        super.onDestroy()
     }
 
     private fun inject() {

@@ -1,6 +1,5 @@
 package com.example.mvvmcleanarchitectuersampleapp
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,21 +12,13 @@ import javax.inject.Inject
 internal class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase): ViewModel() {
 
     private val searchMovieListLiveData: MutableLiveData<List<MovieEntity>> by lazy {
-        MutableLiveData<List<MovieEntity>>()
+        MutableLiveData()
     }
 
     fun searchMovieList(keyWord: String) {
         viewModelScope.launch {
-            Log.i("lifecycletest", "coroutine called")
             searchMovieListLiveData.postValue(searchMovieUseCase.searchMovies(keyWord))
-            Log.i("lifecycletest", "coroutine end")
         }
-        Log.i("lifecycletest", "coroutine return")
-    }
-
-    override fun onCleared() {
-        Log.i("lifecycletest", "onCleared called")
-        super.onCleared()
     }
 
     fun observeToMovieListChange(): LiveData<List<MovieEntity>> {
