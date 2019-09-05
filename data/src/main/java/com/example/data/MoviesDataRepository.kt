@@ -17,7 +17,6 @@ class MoviesDataRepository @Inject constructor(private val restApi: RestApi,
 
     override suspend fun searchMovies(keyWord: String): List<MovieEntity> {
         return if (isCached()) retrieveCache() else cloud(keyWord)
-
     }
 
     private fun retrieveCache(): List<MovieEntity> {
@@ -30,6 +29,7 @@ class MoviesDataRepository @Inject constructor(private val restApi: RestApi,
     }
 
     private suspend fun cloud(keyWord: String): List<MovieEntity> {
+        println("data repository in thread ${Thread.currentThread().name}")
         val movieList = restApi.searchMovies(keyWord, API_KEY).moviesList
         cacheManager.put(KEY_MOVIE_LIST, gson.toJson(movieList))
         return movieList
