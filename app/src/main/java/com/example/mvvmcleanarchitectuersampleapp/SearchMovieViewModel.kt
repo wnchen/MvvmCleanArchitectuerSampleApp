@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.MovieEntity
 import com.example.domain.SearchMovieUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.logging.Level
+import java.util.logging.Logger
 import javax.inject.Inject
 
 internal class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase): ViewModel() {
@@ -17,8 +18,8 @@ internal class SearchMovieViewModel @Inject constructor(private val searchMovieU
     }
 
     fun searchMovieList(keyWord: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            println("launch viewmodelscope in thread ${Thread.currentThread().name}")
+        viewModelScope.launch {
+            Logger.getAnonymousLogger().log(Level.INFO, "launch viewmodelscope in thread ${Thread.currentThread().name}")
             searchMovieListLiveData.postValue(searchMovieUseCase.searchMovies(keyWord))
         }
     }
