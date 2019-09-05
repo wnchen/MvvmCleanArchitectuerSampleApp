@@ -23,22 +23,25 @@ class MoviesDataRepository @Inject constructor(private val restApi: RestApi,
         return if (isCached()) retrieveCache() else cloud(keyWord)
     }
 
-    private fun retrieveCache(): List<MovieEntity> {
-        val movieListStr = movieEntityList ?: cacheManager.get(KEY_MOVIE_LIST)!!
-        return gson.fromJson(movieListStr)
+    private suspend fun retrieveCache(): List<MovieEntity> {
+        return withContext(Dispatchers.IO) {
+            Logger.getAnonymousLogger().log(Level.INFO, "read from cache in thread ${Thread.currentThread().name}")
+            val movieListStr = movieEntityList ?: cacheManager.get(KEY_MOVIE_LIST)!!
+            gson.fromJson(movieListStr) as List<MovieEntity>
+        }
     }
 
-    private fun isCached(): Boolean {
-        return movieEntityList != null || cacheManager.get(KEY_MOVIE_LIST) != null
+    private suspend fun isCached(): Boolean {
+        return withContext(Dispatchers.IO) {
+            movieEntityList != null || cacheManager.get(KEY_MOVIE_LIST) != null
+        }
     }
 
     private suspend fun cloud(keyWord: String): List<MovieEntity> {
-        return withContext(Dispatchers.IO) {
-            Logger.getAnonymousLogger().log(Level.INFO, "data repository in thread ${Thread.currentThread().name}")
-            val movieList = restApi.searchMovies(keyWord, API_KEY).moviesList
-            cacheManager.put(KEY_MOVIE_LIST, gson.toJson(movieList))
-            movieList
-        }
+        Logger.getAnonymousLogger().log(Level.INFO, "data repository in thread ${Thread.currentThread().name}")
+        val movieList = restApi.searchMovies(keyWord, API_KEY).moviesList
+        cacheManager.put(KEY_MOVIE_LIST, gson.toJson(movieList))
+        return movieList
     }
 
     private inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
