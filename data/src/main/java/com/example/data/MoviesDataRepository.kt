@@ -5,6 +5,8 @@ import com.example.domain.MovieEntity
 import com.example.domain.MoviesRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.logging.Level
 import java.util.logging.Logger
 import javax.inject.Inject
@@ -31,10 +33,12 @@ class MoviesDataRepository @Inject constructor(private val restApi: RestApi,
     }
 
     private suspend fun cloud(keyWord: String): List<MovieEntity> {
-        Logger.getAnonymousLogger().log(Level.INFO, "data repository in thread ${Thread.currentThread().name}")
-        val movieList = restApi.searchMovies(keyWord, API_KEY).moviesList
-        cacheManager.put(KEY_MOVIE_LIST, gson.toJson(movieList))
-        return movieList
+        return withContext(Dispatchers.IO) {
+            Logger.getAnonymousLogger().log(Level.INFO, "data repository in thread ${Thread.currentThread().name}")
+            val movieList = restApi.searchMovies(keyWord, API_KEY).moviesList
+            cacheManager.put(KEY_MOVIE_LIST, gson.toJson(movieList))
+            movieList
+        }
     }
 
     private inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
