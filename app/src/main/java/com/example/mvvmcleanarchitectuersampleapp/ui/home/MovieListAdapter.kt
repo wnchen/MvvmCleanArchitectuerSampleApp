@@ -1,6 +1,5 @@
 package com.example.mvvmcleanarchitectuersampleapp.ui.home
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.MovieEntity
 import com.example.mvvmcleanarchitectuersampleapp.R
 
-class MovieListAdapter(private val context: Context, private var movieList: List<MovieEntity>):
+class MovieListAdapter(private var movieList: List<MovieEntity>):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

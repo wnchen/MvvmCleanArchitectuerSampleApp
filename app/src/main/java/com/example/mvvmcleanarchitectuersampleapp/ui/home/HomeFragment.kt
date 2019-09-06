@@ -93,7 +93,7 @@ class HomeFragment : Fragment() {
         @Provides
         @ActivityScope
         internal fun provideMovieListAdapter(): MovieListAdapter {
-            return MovieListAdapter(homeFragment.context!!, listOf())
+            return MovieListAdapter(listOf())
         }
     }
 
