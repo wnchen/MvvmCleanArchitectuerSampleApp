@@ -6,12 +6,16 @@ import com.example.domain.MovieEntity
 import kotlinx.android.synthetic.main.movie_item_view.view.*
 
 class MovieEntityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val tvId = itemView.tv_id
-    val tvName = itemView.tv_name
+    private val tvId = itemView.tv_id
+    private val tvName = itemView.tv_name
 
-    fun bind(movieEntity: MovieEntity) {
+    fun bind(
+        movieEntity: MovieEntity,
+        listener: MovieListAdapter.MovieListClickListener
+    ) {
         tvId.text = movieEntity.id.toString()
         tvName.text = movieEntity.name
+        itemView.setOnClickListener { listener.onItemClicked(movieEntity) }
     }
 
 }

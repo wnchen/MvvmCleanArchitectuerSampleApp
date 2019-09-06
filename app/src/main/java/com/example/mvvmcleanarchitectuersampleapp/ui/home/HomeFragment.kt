@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,7 +19,10 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import javax.inject.Inject
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MovieListAdapter.MovieListClickListener {
+    override fun onItemClicked(movieEntity: MovieEntity) {
+        Toast.makeText(this.context, "clicked on ${movieEntity.name}", Toast.LENGTH_SHORT).show()
+    }
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
@@ -93,7 +97,7 @@ class HomeFragment : Fragment() {
         @Provides
         @ActivityScope
         internal fun provideMovieListAdapter(): MovieListAdapter {
-            return MovieListAdapter(listOf())
+            return MovieListAdapter(listOf(), homeFragment)
         }
     }
 
