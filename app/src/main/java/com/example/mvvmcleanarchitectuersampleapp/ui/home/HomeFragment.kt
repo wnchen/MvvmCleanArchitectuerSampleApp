@@ -20,6 +20,7 @@ import java.util.logging.Logger
 import javax.inject.Inject
 
 class HomeFragment : Fragment(), MovieListAdapter.MovieListClickListener {
+
     override fun onItemClicked(movieEntity: MovieEntity) {
         Toast.makeText(this.context, "clicked on ${movieEntity.name}", Toast.LENGTH_SHORT).show()
     }
