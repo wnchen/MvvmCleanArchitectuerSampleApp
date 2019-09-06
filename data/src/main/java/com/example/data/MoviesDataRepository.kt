@@ -19,7 +19,7 @@ class MoviesDataRepository @Inject constructor(private val restApi: RestApi,
 
     private var movieEntityList: String? = null
 
-    override suspend fun searchMovies(keyWord: String): List<MovieEntity> {
+    override suspend fun searchMovies(keyWord: String): List<MovieEntity>? {
         return if (isCached()) retrieveCache() else cloud(keyWord)
     }
 
