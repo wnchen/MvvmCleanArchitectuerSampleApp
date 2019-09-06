@@ -1,67 +1,57 @@
 package com.example.mvvmcleanarchitectuersampleapp
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.example.domain.MovieEntity
-import dagger.Component
-import dagger.Module
-import dagger.Provides
-import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelFactory
-
-    @Inject
-    internal lateinit var searchMovieViewModel: SearchMovieViewModel
-
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        bindUi()
-    }
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
-    private fun bindUi() {
-        searchMovieViewModel.observeToMovieListChange().observe(this,
-            Observer<List<MovieEntity>> { tv_main.text = it.toString() })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        getPasswordPolicy()
-    }
-
-    private fun getPasswordPolicy() {
-        searchMovieViewModel.searchMovieList("spider")
-    }
-
-    private fun inject() {
-        DaggerMainActivity_MainActivityComponent.builder()
-            .coreComponent(App.coreComponent)
-            .moduleMainActivity(ModuleMainActivity(this))
-            .build()
-            .inject(this)
-    }
-
-    @ActivityScope
-    @Component(modules = [ModuleMainActivity::class], dependencies = [CoreComponent::class])
-    internal interface MainActivityComponent {
-        fun inject(mainActivity: MainActivity)
-    }
-
-    @Module
-    internal class ModuleMainActivity(private val mainActivity: MainActivity) {
-
-        @Provides
-        @ActivityScope
-        internal fun provideGetPasswordPolicyViewModel(): SearchMovieViewModel {
-            return ViewModelProviders.of(mainActivity, mainActivity.viewModelFactory).get(SearchMovieViewModel::class.java)
+        val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
         }
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+            ), drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.mvvmcleanarchitectuersampleapp
+package com.example.mvvmcleanarchitectuersampleapp.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import javax.inject.Inject
 
-internal class SearchMovieViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase): ViewModel() {
+internal class HomeViewModel @Inject constructor(private val searchMovieUseCase: SearchMovieUseCase): ViewModel() {
 
     private val searchMovieListLiveData: MutableLiveData<List<MovieEntity>> by lazy {
         MutableLiveData<List<MovieEntity>>()
