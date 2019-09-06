@@ -12,7 +12,6 @@ class MovieListAdapter(private val context: Context, private var movieList: List
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val vh: RecyclerView.ViewHolder
         val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item_view, parent, false)
         return MovieEntityViewHolder(view)
     }
@@ -32,5 +31,4 @@ class MovieListAdapter(private val context: Context, private var movieList: List
         movieList = updateMovieList ?: listOf()
         diffResult.dispatchUpdatesTo(this)
     }
-
 }
